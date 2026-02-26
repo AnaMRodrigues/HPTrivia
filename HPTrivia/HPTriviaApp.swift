@@ -16,7 +16,7 @@ struct HPTriviaApp: App {
     }
 }
 
-/*
+/*      Command + Control + Space For emojis
  App Development Plan:
  - Game Intro Screen
  - Gameplay Screen
@@ -26,7 +26,7 @@ struct HPTriviaApp: App {
  - Animations
  - In-app purchases
  - Store
- - Instruction Screen
+ 🟨 Instruction Screen
  - Books
  - Persist Scores
  */
