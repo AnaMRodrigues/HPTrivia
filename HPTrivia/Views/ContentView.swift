@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct ContentView: View {
+    @State private var audioPlayer: AVAudioPlayer!
     @State private var animateViewsIn = false
     
     var body: some View {
@@ -54,7 +56,15 @@ struct ContentView: View {
         .ignoresSafeArea()
         .onAppear {
             animateViewsIn = true
+            //playAudio() //remove the comment before commit
         }
+    }
+    
+    private func playAudio() {
+        let sound = Bundle.main.path(forResource: "magic-in-the-air", ofType: "mp3")
+        audioPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
+        audioPlayer.numberOfLoops = -1 //equals infinity
+        audioPlayer.play()
     }
 }
 
