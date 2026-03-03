@@ -12,6 +12,9 @@ struct ContentView: View {
     @State private var audioPlayer: AVAudioPlayer!
     @State private var animateViewsIn = false
     @State private var scalePlayButton = false
+    @State private var showInstructions = false
+    @State private var showSettings = false
+    @State private var playGame = false
     
     var body: some View {
         GeometryReader { geo in
@@ -54,10 +57,30 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    VStack {
+                    HStack {
+                        
+                        Spacer()
+                        
+                        VStack {
+                            if animateViewsIn {
+                                Button {
+                                    showInstructions.toggle()
+                                } label: {
+                                    Image(systemName: "info.circle.fill")
+                                        .font(.largeTitle)
+                                        .foregroundStyle(.white)
+                                        .shadow(radius: 5)
+                                }
+                                .transition(.offset(x: -geo.size.width/2))
+                            }
+                        }
+                        .animation(.easeOut(duration: 0.7).delay(1.5), value: animateViewsIn)
+                            
+                        Spacer()
+                            
                         if animateViewsIn {
                             Button {
-                                
+                                playGame.toggle()
                             } label: {
                                 Text("Play")
                                     .font(.largeTitle)
@@ -76,11 +99,33 @@ struct ContentView: View {
                             }
                             .transition(.offset(y: geo.size.height/3))
                         }
+                            
+                            
+                        Spacer()
+                        
+                        VStack {
+                            if animateViewsIn {
+                                Button {
+                                    showSettings.toggle()
+                                } label: {
+                                    Image(systemName: "gearshape.fill")
+                                        .font(.largeTitle)
+                                        .foregroundStyle(.white)
+                                        .shadow(radius: 5)
+                                }
+                                .transition(.offset(x: geo.size.width/2))
+                            }
+                        }
+                        .animation(.easeOut(duration: 0.7).delay(1.5), value: animateViewsIn)
+                            
+                        Spacer()
+                        
                     }
                     .animation(.easeOut(duration: 1).delay(0.75), value: animateViewsIn)
-                    
+
                     Spacer()
                 }
+                .frame(width: geo.size.width)
 
             }
             .frame(width: geo.size.width, height: geo.size.height)
@@ -88,7 +133,10 @@ struct ContentView: View {
         .ignoresSafeArea()
         .onAppear {
             animateViewsIn = true
-            playAudio()
+            //playAudio()
+        }
+        .sheet(isPresented: $showInstructions) {
+            Instructions()
         }
     }
     
