@@ -53,7 +53,24 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Spacer()
+                    VStack {
+                        if animateViewsIn {
+                            VStack {
+                                Text("Recent Scores")
+                                    .font(.title2)
+                                Text("33")
+                                Text("67")
+                                Text("15")
+                            }
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal)
+                            .background(.black.opacity(0.7))
+                            .clipShape(.rect(cornerRadius: 15))
+                            .transition(.opacity)
+                        }
+                    }
+                    .animation(.linear(duration: 1).delay(4), value: animateViewsIn)
                     
                     Spacer()
                     
@@ -133,12 +150,13 @@ struct ContentView: View {
         .ignoresSafeArea()
         .onAppear {
             animateViewsIn = true
-            //playAudio()
+            playAudio()
         }
         .sheet(isPresented: $showInstructions) {
             Instructions()
         }
     }
+        
     
     private func playAudio() {
         let sound = Bundle.main.path(forResource: "magic-in-the-air", ofType: "mp3")
