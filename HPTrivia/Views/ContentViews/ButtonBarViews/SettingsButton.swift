@@ -28,11 +28,15 @@ struct SettingsButton: View {
             }
         }
         .animation(.easeOut(duration: 0.7).delay(1.5), value: animateViewsIn)
+        .sheet(isPresented: $showSettings) {
+            SelectBooks()
+        }
     }
 }
 
 #Preview {
     GeometryReader { geo in
         SettingsButton(animateViewsIn: .constant(true), geo: geo)
+            .environment(Game())
     }
 }
