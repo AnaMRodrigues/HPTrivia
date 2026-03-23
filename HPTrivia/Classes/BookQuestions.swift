@@ -52,7 +52,7 @@ class BookQuestions {
         books.append(Book(id: 7, image: "hp7", questions: questions[7], status: .locked))
     }
     
-    func changeStatus(of id: Int, to status: BookStatus) {
+    func changeStatus(of id: Int, to status: BookStatus) {//Shows a error if the BookStatus enum is inside the Book struct
         books[id-1].status = status
     }
 }
