@@ -19,6 +19,8 @@ struct HPTriviaApp: App {
     }
 }
 
+//control + i - Indent the code
+
 /*      Command + Control + Space For emojis
  App Development Plan:
  🟦 Game Intro Screen
@@ -30,6 +32,11 @@ struct HPTriviaApp: App {
  - In-app purchases
  - Store
  ✅ Instruction Screen
- - Books
+ 🟦 Books
  - Persist Scores
+ 
+ ✅ = Done
+ 🟨 = Started
+ 🟦 = Almost finished
+ 🇧🇷
  */
