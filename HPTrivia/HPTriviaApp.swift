@@ -23,8 +23,8 @@ struct HPTriviaApp: App {
 
 /*      Command + Control + Space For emojis
  App Development Plan:
- 🟦 Game Intro Screen
- - Gameplay Screen
+ ✅ Game Intro Screen
+ 🟨 Gameplay Screen
  🟨 Game Logic (Questions, Score, etc.)
  - Celebration
  🟨 Audio
