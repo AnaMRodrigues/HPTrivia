@@ -6,8 +6,15 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct Gameplay: View {
+    @Environment(Game.self) private var game
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var musicPlayer: AVAudioPlayer!
+    @State private var sfxPlayer: AVAudioPlayer!
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -36,9 +43,46 @@ struct Gameplay: View {
             // MARK: Celebration
         }
         .ignoresSafeArea()
+        .onAppear {
+            game.startGame()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                playMusic()
+            }
+        }
     }
+    
+    private func playMusic() {
+        let songs = ["let-the-mistery-unfold", "spellcraft", "hiding-place-in-the-forest", "deep-in-the-dell"]
+        let song = songs.randomElement()!
+        
+        let sound = Bundle.main.path(forResource: song, ofType: "mp3")
+        musicPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
+        musicPlayer.numberOfLoops = -1 //equals infinity
+        musicPlayer.volume = 0.1 // 10%
+        musicPlayer.play()
+    }
+    
+    private func playFlipSound() {
+        let sound = Bundle.main.path(forResource: "page-flip", ofType: "mp3")
+        sfxPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
+        sfxPlayer.play()
+    }
+    
+    private func playWrongSound() {
+        let sound = Bundle.main.path(forResource: "negative-beeps", ofType: "mp3")
+        sfxPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
+        sfxPlayer.play()
+    }
+    
+    private func playCorrectSound() {
+        let sound = Bundle.main.path(forResource: "magic-wand", ofType: "mp3")
+        sfxPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
+        sfxPlayer.play()
+    }
+    
 }
 
 #Preview {
     Gameplay()
+        .environment(Game())
 }
