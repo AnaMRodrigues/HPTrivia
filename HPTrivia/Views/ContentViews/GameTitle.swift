@@ -25,7 +25,6 @@ struct GameTitle: View {
                     Text("Trivia")
                         .font(.custom("PartyLetPlain", fixedSize: 60))
                 }
-                .padding(.top, 70)
                 .transition(.move(edge: .top))
             }
         }

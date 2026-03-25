@@ -27,6 +27,8 @@ struct Instructions: View {
                 Text("How To Play")
                     .font(.largeTitle)
                     .padding()
+                    .foregroundStyle(.black)
+                
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
                         Text("Welcome to HP Trivia! In this game you will be asked random questions from the HP books and you must guess the right answer or you will lose points!😱")

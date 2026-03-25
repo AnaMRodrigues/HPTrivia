@@ -18,6 +18,7 @@ struct Gameplay: View {
     @State private var animateViewsIn = false
     @State private var revealHint = false
     @State private var revealBook = false
+    @State private var tappedCorrectAnswer = false
     
     var body: some View {
         GeometryReader { geo in
@@ -46,21 +47,23 @@ struct Gameplay: View {
                         Text("Score: \(game.gameScore)")
                     }
                     .padding(30)
-                    .padding(.vertical, 30)
+                    .padding(.top, 30)
                     
                     // MARK: Question
                     VStack {
                         if animateViewsIn {
                             Text(game.currentQuestion.question)
                                 .font(.custom("PartyLetPlain", size: 50))
+                                .minimumScaleFactor(0.5)
                                 .multilineTextAlignment(.center)
                                 .padding()
                                 .transition(.scale)
                         }
                     }
                     .animation(.easeInOut(duration: 2), value: animateViewsIn)
+                    .padding(.bottom, 20)
                     
-                    Spacer()
+//                    Spacer()
                     
                     // MARK: Hints
                     HStack {
@@ -70,7 +73,7 @@ struct Gameplay: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 100)
-                                    .foregroundStyle(.cyan)
+                                    .foregroundStyle(.blue)
                                     .padding()
                                     .transition(.offset(x: -geo.size.width / 2))
                                     .phaseAnimator([false, true]) { content, phase in
@@ -100,6 +103,7 @@ struct Gameplay: View {
                                     }
                             }
                         }
+                        .frame(height: 250, alignment: revealHint ? .center : .bottom)
                         .animation(.easeOut(duration: 1.5).delay(2), value: animateViewsIn)
                         
                         Spacer()
@@ -110,7 +114,7 @@ struct Gameplay: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: revealBook ? 150 : 100)
-                                    .foregroundStyle(.cyan)
+                                    .foregroundStyle(.blue)
                                     .overlay {
                                         Image(systemName: "book.closed")
                                             .resizable()
@@ -142,6 +146,7 @@ struct Gameplay: View {
                                             Image("hp\(game.currentQuestion.book)")
                                                 .resizable()
                                                 .scaledToFit()
+                                                .frame(maxHeight: 200)
                                             Text("Book \(game.currentQuestion.book)")
                                                 .minimumScaleFactor(0.5)
                                                 .multilineTextAlignment(.center)
@@ -151,11 +156,60 @@ struct Gameplay: View {
                                     }
                             }
                         }
+                        .frame(height: 250, alignment: revealBook ? .center : .bottom)
                         .animation(.easeOut(duration: 1.5).delay(2), value: animateViewsIn)
                     }
                     .padding()
                     
                     // MARK: Answers
+                    LazyVGrid (columns: [GridItem(), GridItem()]) {
+                        ForEach(game.answers, id: \.self) { answer in
+                            if answer == game.currentQuestion.answer {
+                                VStack {
+                                    if animateViewsIn {
+                                        Button {
+                                            tappedCorrectAnswer = true
+                                            playCorrectSound()
+                                            game.correct()
+                                            
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                tappedCorrectAnswer = false
+                                            }
+                                        } label: {
+                                            Text(answer)
+                                                .minimumScaleFactor(0.5)
+                                                .multilineTextAlignment(.center)
+                                                .padding(10)
+                                                .frame(width: geo.size.width / 2.15, height: 80)
+                                                .background(tappedCorrectAnswer ? .green.opacity(0.5) : .yellow.opacity(0.5))
+                                                .clipShape(.rect(cornerRadius: 25))
+                                        }
+                                        .transition(.offset(y: geo.size.height / 2))
+                                    }
+                                }
+                                .animation(.easeOut(duration: 1.5).delay(2), value: animateViewsIn)
+                            } else {
+                                VStack {
+                                    if animateViewsIn {
+                                        Button {
+                                            playWrongSound()
+                                            game.questionScore -= 1
+                                        } label: {
+                                            Text(answer)
+                                                .minimumScaleFactor(0.5)
+                                                .multilineTextAlignment(.center)
+                                                .padding(10)
+                                                .frame(width: geo.size.width / 2.15, height: 80)
+                                                .background(.yellow.opacity(0.5))
+                                                .clipShape(.rect(cornerRadius: 25))
+                                        }
+                                        .transition(.offset(y: geo.size.height / 2))
+                                    }
+                                }
+                                .animation(.easeOut(duration: 1.5).delay(2), value: animateViewsIn)
+                            }
+                        }
+                    }
                     
                     Spacer()
                 }

@@ -33,6 +33,7 @@ struct SelectBooks: View {
                 Text("Which books would you like to see questions from?")
                     .font(.title)
                     .multilineTextAlignment(.center)
+                    .padding(.top, 10)
                     .padding()
                 
                 ScrollView {

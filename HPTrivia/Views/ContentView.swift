@@ -19,6 +19,8 @@ struct ContentView: View {
                 AnimatedBackground(geo: geo)
                 
                 VStack {
+                    Spacer()
+                    
                     GameTitle(animateViewsIn: $animateViewsIn)
                     
                     Spacer()
