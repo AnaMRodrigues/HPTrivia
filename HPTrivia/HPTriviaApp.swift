@@ -35,13 +35,8 @@ struct HPTriviaApp: App {
  ✅ Books
  ✅ Persist Scores
  
- ✅ = Done
- 🟨 = Started
- 🟦 = Almost finished
- 🇧🇷
- 
  To try later
- - Animation on the score that increases the value 1 by 1
+ ✅ Animation on the score that increases the value 1 by 1
  - End of questions screen / The end
  
  Challenges
@@ -50,4 +45,9 @@ struct HPTriviaApp: App {
  - 3. Make the recent scores section tappable and it goes to a full stats screen that shows all the games played
     - In this screen, do a sort filter for recent, highest score
  - 4. Refactor the gameplay screen
+ 
+ ✅ = Done
+ 🟨 = Started
+ 🟦 = Almost finished
+ 🇧🇷
  */

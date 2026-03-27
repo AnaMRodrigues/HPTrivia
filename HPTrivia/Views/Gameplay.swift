@@ -15,6 +15,7 @@ struct Gameplay: View {
     
     @State private var musicPlayer: AVAudioPlayer!
     @State private var sfxPlayer: AVAudioPlayer!
+    @State private var scoreTimer: Timer?
     
     @State private var animateViewsIn = false
     @State private var revealHint = false
@@ -22,6 +23,7 @@ struct Gameplay: View {
     @State private var tappedCorrectAnswer = false
     @State private var wrongAnswersTapped: [String] = []
     @State private var movePointsToScore = false
+    @State private var animatedScore: Int = 0
     
     var body: some View {
         GeometryReader { geo in
@@ -47,7 +49,7 @@ struct Gameplay: View {
                         
                         Spacer()
                         
-                        Text("Score: \(game.gameScore)")
+                        Text("Score: \(animatedScore)")
                     }
                     .padding(30)
                     .padding(.top, 30)
@@ -178,6 +180,7 @@ struct Gameplay: View {
                                                     playCorrectSound()
                                                     DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                                                         game.correct()
+                                                        animateScoreIncrement()
                                                     }
                                                 } label: {
                                                     Text(answer)
@@ -289,6 +292,7 @@ struct Gameplay: View {
                                 tappedCorrectAnswer = false
                                 wrongAnswersTapped = []
                                 movePointsToScore = false
+                                animatedScore = game.gameScore
                                 
                                 game.newQuestion()
                                 
@@ -326,6 +330,7 @@ struct Gameplay: View {
         .ignoresSafeArea()
         .onAppear {
             game.startGame()
+            animatedScore = game.gameScore
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 animateViewsIn = true
@@ -345,7 +350,7 @@ struct Gameplay: View {
         musicPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
         musicPlayer.numberOfLoops = -1 //equals infinity
         musicPlayer.volume = 0.1 // 10%
-        musicPlayer.play()
+        //musicPlayer.play()
     }
     
     private func playFlipSound() {
@@ -364,6 +369,26 @@ struct Gameplay: View {
         let sound = Bundle.main.path(forResource: "magic-wand", ofType: "mp3")
         sfxPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
         sfxPlayer.play()
+    }
+    
+    private func animateScoreIncrement() {
+        let target = game.gameScore
+        
+        if animatedScore >= target { return }
+        
+        // Invalidate any existing timer before starting a new one
+        scoreTimer?.invalidate()
+        
+        scoreTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+            DispatchQueue.main.async {
+                if self.animatedScore < target {
+                    self.animatedScore += 1
+                } else {
+                    self.scoreTimer?.invalidate()
+                    self.scoreTimer = nil
+                }
+            }
+        }
     }
     
 }
