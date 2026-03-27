@@ -11,8 +11,6 @@ struct SelectBooks: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(Game.self) private var game
     
-    @State private var showTempAlert = false
-    
     private var store = Store()
     
     var activeBooks: Bool {
@@ -41,8 +39,11 @@ struct SelectBooks: View {
                 ScrollView {
                     LazyVGrid(columns: [GridItem(), GridItem()]) {
                         ForEach(game.bookQuestions.books) { book in
-                            if book.status == .active {
+                            if book.status == .active || (book.status == .locked && store.purchased.contains(book.image)){
                                 ActiveBook(book: book)
+                                    .task {
+                                        game.bookQuestions.changeStatus(of: book.id, to: .active)
+                                    }
                                     .onTapGesture {
                                         game.bookQuestions.changeStatus(of: book.id, to: .inactive)
                                     }
@@ -54,9 +55,11 @@ struct SelectBooks: View {
                             } else {
                                 LockedBook(book: book)
                                     .onTapGesture {
-                                        showTempAlert.toggle()
+                                        let product = store.products[book.id - 4]
                                         
-                                        game.bookQuestions.changeStatus(of: book.id, to: .active)
+                                        Task {
+                                            await store.purchase(product)
+                                        }
                                     }
                             }
                         }
@@ -84,9 +87,6 @@ struct SelectBooks: View {
             .foregroundStyle(.black)
         }
         .interactiveDismissDisabled(!activeBooks)
-        .alert("You successfully purchased a new question pack. Enjoy!", isPresented: $showTempAlert) {
-            //No action needed
-        }
         .task {
             await store.loadProducts()
         }
