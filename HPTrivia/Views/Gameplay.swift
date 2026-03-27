@@ -21,6 +21,7 @@ struct Gameplay: View {
     @State private var revealBook = false
     @State private var tappedCorrectAnswer = false
     @State private var wrongAnswersTapped: [String] = []
+    @State private var movePointsToScore = false
     
     var body: some View {
         GeometryReader { geo in
@@ -89,7 +90,7 @@ struct Gameplay: View {
                                                 revealHint = true
                                             }
                                             playFlipSound()
-                                            game.gameScore -= 1
+                                            game.questionScore -= 1
                                         }
                                         .rotation3DEffect(.degrees(revealHint ? 1440 : 0), axis: (x: 0, y: 1, z: 0))
                                         .scaleEffect(revealHint ? 5 : 1)
@@ -137,7 +138,7 @@ struct Gameplay: View {
                                                 revealBook = true
                                             }
                                             playFlipSound()
-                                            game.gameScore -= 1
+                                            game.questionScore -= 1
                                         }
                                         .rotation3DEffect(.degrees(revealBook ? -1440 : 0), axis: (x: 0, y: 1, z: 0))
                                         .scaleEffect(revealBook ? 5 : 1)
@@ -175,7 +176,9 @@ struct Gameplay: View {
                                                         tappedCorrectAnswer = true
                                                     }
                                                     playCorrectSound()
-                                                    game.correct()
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                                        game.correct()
+                                                    }
                                                 } label: {
                                                     Text(answer)
                                                         .minimumScaleFactor(0.5)
@@ -186,7 +189,7 @@ struct Gameplay: View {
                                                         .clipShape(.rect(cornerRadius: 25))
                                                         .matchedGeometryEffect(id: 1, in: namespace)
                                                 }
-                                                .transition(.asymmetric(insertion: .offset(y: geo.size.height / 2), removal: .scale(scale: 3).combined(with: .opacity)))
+                                                .transition(.asymmetric(insertion: .offset(y: geo.size.height / 2), removal: .scale(scale: 4).combined(with: .opacity)))
                                             }
                                         }
                                     }
@@ -233,10 +236,17 @@ struct Gameplay: View {
                     
                     VStack {
                         if tappedCorrectAnswer {
-                            Text("\(game.questionScore) points")
+                            Text("\(game.questionScore)")
                                 .font(.largeTitle)
                                 .padding(.top, 50)
                                 .transition(.offset(y: -geo.size.height / 4))
+                                .offset(x: movePointsToScore ? geo.size.width / 2.3 : 0, y: movePointsToScore ? -geo.size.height / 13 : 0)
+                                .opacity(movePointsToScore ? 0 : 1)
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 1.5).delay(3)) {
+                                        movePointsToScore = true
+                                    }
+                                }
                         }
                     }
                     .animation(.easeInOut(duration: 1).delay(2), value: tappedCorrectAnswer)
@@ -284,6 +294,12 @@ struct Gameplay: View {
                             }
                             .font(.largeTitle)
                             .transition(.offset(y: geo.size.height / 3))
+                            .phaseAnimator([false, true]) { content, phase in
+                                content
+                                    .scaleEffect(phase ? 1.2 : 1)
+                            } animation: { _ in
+                                    .easeInOut(duration: 1.3)
+                            }
                         }
                     }
                     .animation(.easeInOut(duration: 2.7).delay(2.7), value: tappedCorrectAnswer)
