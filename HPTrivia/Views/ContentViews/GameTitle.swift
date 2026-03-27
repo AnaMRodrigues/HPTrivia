@@ -25,7 +25,10 @@ struct GameTitle: View {
                     Text("Trivia")
                         .font(.custom("PartyLetPlain", fixedSize: 60))
                 }
-                .transition(.move(edge: .top))
+                .transition(.asymmetric(
+                    insertion: .move(edge: .top).combined(with: .opacity),
+                    removal: .opacity
+                ))
             }
         }
         .animation(.easeOut(duration: 1).delay(0.75), value: animateViewsIn)

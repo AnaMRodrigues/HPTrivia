@@ -20,6 +20,12 @@ class Game {
     var currentQuestion = try! JSONDecoder().decode([Question].self, from: Data(contentsOf: Bundle.main.url(forResource: "trivia", withExtension: "json")!))[0] //put a sample question to initialize the currentQuestion, but change to the actual one later
     var answers: [String] = []
     
+    let savePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appending(path: "RecentScores")
+    
+    init() {
+        loadScores()
+    }
+    
     func startGame() {
         for book in bookQuestions.books {
             if book.status == .active {
@@ -69,11 +75,30 @@ class Game {
         recentScores[2] = recentScores[1]
         recentScores[1] = recentScores[0]
         recentScores[0] = gameScore
+        saveScores()
         
         //reset the gameScore, activeQuestions and answeredQuestions
         gameScore = 0
         activeQuestions = []
         answeredQuestions = []
+    }
+    
+    func saveScores() {
+        do {
+            let data = try JSONEncoder().encode(recentScores)
+            try data.write(to: savePath)
+        } catch {
+            print("Unable to save data: \(error)")
+        }
+    }
+    
+    func loadScores() {
+        do {
+            let data = try Data(contentsOf: savePath)
+            recentScores = try JSONDecoder().decode([Int].self, from: data)
+        } catch {
+            recentScores = [0, 0, 0]
+        }
     }
 }
 
