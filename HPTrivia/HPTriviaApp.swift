@@ -26,17 +26,28 @@ struct HPTriviaApp: App {
  ✅ Game Intro Screen
  ✅ Gameplay Screen
  ✅ Game Logic (Questions, Score, etc.)
- - Celebration
+ ✅ Celebration
  ✅ Audio
  ✅ Animations
- - In-app purchases
- - Store
+ ✅ In-app purchases
+ ✅ Store
  ✅ Instruction Screen
- 🟦 Books
+ ✅ Books
  ✅ Persist Scores
  
  ✅ = Done
  🟨 = Started
  🟦 = Almost finished
  🇧🇷
+ 
+ To try later
+ - Animation on the score that increases the value 1 by 1
+ - End of questions screen / The end
+ 
+ Challenges
+ - 1. Search and change the wrong sound to Voldemort's evil laugh (or any evil laugh)
+ - 2. The player have to add their name before they start a new game and shows the name at the recent scores
+ - 3. Make the recent scores section tappable and it goes to a full stats screen that shows all the games played
+    - In this screen, do a sort filter for recent, highest score
+ - 4. Refactor the gameplay screen
  */
