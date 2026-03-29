@@ -371,6 +371,12 @@ struct Gameplay: View {
         sfxPlayer.play()
     }
     
+    private func playClick(){
+        let sound = Bundle.main.path(forResource: "click", ofType: "mp3")
+        sfxPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
+        sfxPlayer.play()
+    }
+    
     private func animateScoreIncrement() {
         let target = game.gameScore
         
@@ -383,6 +389,7 @@ struct Gameplay: View {
             DispatchQueue.main.async {
                 if self.animatedScore < target {
                     self.animatedScore += 1
+                    playClick()
                 } else {
                     self.scoreTimer?.invalidate()
                     self.scoreTimer = nil
