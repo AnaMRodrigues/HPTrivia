@@ -42,19 +42,7 @@ struct Gameplay: View {
                 VStack {
                     //Flags for organization of larger projects
                     // MARK: Controls
-                    HStack {
-                        Button("End Game"){
-                            currentScreen = .finish
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.red.opacity(0.5))
-                        
-                        Spacer()
-                        
-                        Text("Score: \(animatedScore)")
-                    }
-                    .padding(30)
-                    .padding(.top, 30)
+                    ControlBar(animatedScore: $animatedScore, currentScreen: $currentScreen)
                     
                     VStack {
                         

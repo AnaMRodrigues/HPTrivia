@@ -47,7 +47,7 @@ struct HPTriviaApp: App {
  - 2. The player have to add their name before they start a new game and shows the name at the recent scores
  - 3. Make the recent scores section tappable and it goes to a full stats screen that shows all the games played
     - In this screen, do a sort filter for recent, highest score
- - 4. Refactor the gameplay screen
+ 🟨 4. Refactor the gameplay screen
  
  ✅ = Done
  🟨 = Started
