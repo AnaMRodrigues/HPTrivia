@@ -29,6 +29,7 @@ struct GameTitle: View {
                     insertion: .move(edge: .top).combined(with: .opacity),
                     removal: .opacity
                 ))
+                .foregroundStyle(.white)
             }
         }
         .animation(.easeOut(duration: 1).delay(0.75), value: animateViewsIn)

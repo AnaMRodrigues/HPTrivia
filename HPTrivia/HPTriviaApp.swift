@@ -38,9 +38,9 @@ struct HPTriviaApp: App {
  To try later
  ✅ Animation on the score that increases the value 1 by 1
     ✅ "Tick" sfx for the animation of increasing the score
- 🟨 End of questions screen / The end
+ 🟦 End of questions screen / The end
  - Alerts for cancelling the purchase
- - Sky background for all screens
+ ✅ Sky background for all screens
  
  Challenges
  - 1. Search and change the wrong sound to Voldemort's evil laugh (or any evil laugh)

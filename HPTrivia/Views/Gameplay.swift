@@ -28,6 +28,9 @@ struct Gameplay: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
+                Image(.sky)
+                    .resizable()
+                
                 Image(.hogwarts)
                     .resizable()
                     .frame(width: geo.size.width * 3, height: geo.size.height * 1.05)
@@ -41,7 +44,6 @@ struct Gameplay: View {
                     // MARK: Controls
                     HStack {
                         Button("End Game"){
-                            game.endGame()
                             currentScreen = .finish
                         }
                         .buttonStyle(.borderedProminent)

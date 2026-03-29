@@ -53,7 +53,7 @@ struct ContentView: View {
                     animateViewsIn = true
                     playAudio()
                 }
-                .transition(.move(edge: .leading))
+                .transition(.move(edge: .trailing))
                 
             case .game:
                 Gameplay(currentScreen: $currentScreen)
@@ -63,7 +63,7 @@ struct ContentView: View {
                     .transition(.move(edge: .trailing))
             }
         }
-        .animation(.easeInOut(duration: 1), value: currentScreen)
+        .animation(.easeInOut(duration: 0.5), value: currentScreen)
     }
     
     private func playAudio() {
