@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlayButton: View {
     @Binding var animateViewsIn: Bool
-    @Binding var playGame: Bool
+    @Binding var currentScreen: Screen
     
     @State private var scalePlayButton = false
     
@@ -19,7 +19,9 @@ struct PlayButton: View {
         VStack {
             if animateViewsIn {
                 Button {
-                    playGame.toggle()
+                    withAnimation {
+                        currentScreen = .game
+                    }
                 } label: {
                     Text("Play")
                         .font(.largeTitle)
@@ -44,6 +46,6 @@ struct PlayButton: View {
 
 #Preview {
     GeometryReader { geo in
-        PlayButton(animateViewsIn: .constant(true), playGame: .constant(false), geo: geo)
+        PlayButton(animateViewsIn: .constant(true), currentScreen: .constant(.home), geo: geo)
     }
 }

@@ -9,8 +9,8 @@ import SwiftUI
 import AVKit
 
 struct Gameplay: View {
+    @Binding var currentScreen: Screen
     @Environment(Game.self) private var game
-    @Environment(\.dismiss) private var dismiss
     @Namespace private var namespace
     
     @State private var musicPlayer: AVAudioPlayer!
@@ -42,7 +42,7 @@ struct Gameplay: View {
                     HStack {
                         Button("End Game"){
                             game.endGame()
-                            dismiss()
+                            currentScreen = .finish
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(.red.opacity(0.5))
@@ -178,6 +178,7 @@ struct Gameplay: View {
                                                         tappedCorrectAnswer = true
                                                     }
                                                     playCorrectSound()
+                                                    game.answeredQuestions.append(game.currentQuestion.id)
                                                     DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                                                         game.correct()
                                                         animateScoreIncrement()
@@ -285,6 +286,7 @@ struct Gameplay: View {
                     
                     VStack {
                         if tappedCorrectAnswer {
+                            let isLastQuestion = (game.answeredQuestions.count == game.activeQuestions.count)
                             Button {
                                 animateViewsIn = false
                                 revealHint = false
@@ -294,13 +296,17 @@ struct Gameplay: View {
                                 movePointsToScore = false
                                 animatedScore = game.gameScore
                                 
-                                game.newQuestion()
+                                if isLastQuestion {
+                                    currentScreen = .finish
+                                } else {
+                                    game.newQuestion()
+                                }
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                     animateViewsIn = true
                                 }
                             } label: {
-                                Text("Next Level")
+                                Text(isLastQuestion ? "End Game" : "Next Level")
                                     .minimumScaleFactor(0.5)
                                     .multilineTextAlignment(.center)
                                     .padding(.horizontal, 10)
@@ -401,6 +407,6 @@ struct Gameplay: View {
 }
 
 #Preview {
-    Gameplay()
+    Gameplay(currentScreen: .constant(.game))
         .environment(Game())
 }

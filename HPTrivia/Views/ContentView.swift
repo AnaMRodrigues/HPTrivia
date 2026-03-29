@@ -8,58 +8,69 @@
 import SwiftUI
 import AVKit
 
+enum Screen {
+    case home
+    case game
+    case finish
+}
+
 struct ContentView: View {
     @State private var audioPlayer: AVAudioPlayer!
     @State private var animateViewsIn = false
-    @State private var playGame = false
+    @State private var finishGame = false
+    @State private var currentScreen: Screen = .home
     
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                AnimatedBackground(geo: geo)
-                
-                VStack {
-                    Spacer()
-                    
-                    GameTitle(animateViewsIn: $animateViewsIn)
-                    
-                    Spacer()
-                    
-                    RecentScores(animateViewsIn: $animateViewsIn)
-                    
-                    Spacer()
-                    
-                    ButtonBar(animateViewsIn: $animateViewsIn, playGame: $playGame, geo: geo)
-
-                    Spacer()
+        ZStack {
+            switch currentScreen {
+            case .home:
+                GeometryReader { geo in
+                    ZStack {
+                        AnimatedBackground(geo: geo)
+                        
+                        VStack {
+                            Spacer()
+                            
+                            GameTitle(animateViewsIn: $animateViewsIn)
+                            
+                            Spacer()
+                            
+                            RecentScores(animateViewsIn: $animateViewsIn)
+                            
+                            Spacer()
+                            
+                            ButtonBar(animateViewsIn: $animateViewsIn, currentScreen: $currentScreen, geo: geo)
+                            
+                            Spacer()
+                        }
+                        .frame(width: geo.size.width)
+                        
+                    }
+                    .frame(width: geo.size.width, height: geo.size.height)
                 }
-                .frame(width: geo.size.width)
-
-            }
-            .frame(width: geo.size.width, height: geo.size.height)
-        }
-        .ignoresSafeArea()
-        .onAppear {
-            animateViewsIn = true
-            playAudio()
-        }
-        .fullScreenCover(isPresented: $playGame) {
-            Gameplay()
+                .ignoresSafeArea()
                 .onAppear {
-                    audioPlayer.setVolume(0, fadeDuration: 2)
+                    animateViewsIn = true
+                    playAudio()
                 }
-                .onDisappear {
-                    audioPlayer.setVolume(1, fadeDuration: 3)
-                }
+                .transition(.move(edge: .leading))
+                
+            case .game:
+                Gameplay(currentScreen: $currentScreen)
+                    .transition(.move(edge: .trailing))
+            case .finish:
+                Finish(currentScreen: $currentScreen)
+                    .transition(.move(edge: .trailing))
+            }
         }
+        .animation(.easeInOut(duration: 1), value: currentScreen)
     }
-        
     
     private func playAudio() {
         let sound = Bundle.main.path(forResource: "magic-in-the-air", ofType: "mp3")
         audioPlayer = try! AVAudioPlayer(contentsOf: URL(filePath: sound!))
         audioPlayer.numberOfLoops = -1 //equals infinity
-        //audioPlayer.play() 
+        //audioPlayer.play()
     }
 }
 
