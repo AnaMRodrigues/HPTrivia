@@ -14,8 +14,9 @@ struct Celebration: View {
     @Binding var revealBook: Bool
     @Binding var tappedCorrectAnswer: Bool
     @Binding var wrongAnswersTapped: [String]
-    @Binding var movePointsToScore: Bool
     @Binding var animatedScore: Int
+    
+    @State private var movePointsToScore = false
     
     @Environment(Game.self) private var game
     
@@ -74,7 +75,6 @@ struct CelebrationPreviewWrapper: View {
                 revealBook: .constant(false),
                 tappedCorrectAnswer: .constant(true),
                 wrongAnswersTapped: .constant([]),
-                movePointsToScore: .constant(false),
                 animatedScore: .constant(0),
                 geo: geo,
                 namespace: namespace
