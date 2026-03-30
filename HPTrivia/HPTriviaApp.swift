@@ -49,6 +49,7 @@ struct HPTriviaApp: App {
     - In this screen, do a sort filter for recent, highest score
  🟨 4. Refactor the gameplay screen
     ✅ Refactor the HintsView
+    ✅ Refactor the Celebration Screen
  
  ✅ = Done
  🟨 = Started

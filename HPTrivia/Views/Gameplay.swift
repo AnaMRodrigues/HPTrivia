@@ -79,7 +79,7 @@ struct Gameplay: View {
                                                         .clipShape(.rect(cornerRadius: 25))
                                                         .matchedGeometryEffect(id: 1, in: namespace)
                                                 }
-                                                .transition(.asymmetric(insertion: .offset(y: geo.size.height / 2), removal: .scale(scale: 4).combined(with: .opacity)))
+                                                .transition(.offset(y: geo.size.height / 2))
                                             }
                                         }
                                     }
@@ -122,99 +122,17 @@ struct Gameplay: View {
                 .frame(width: geo.size.width, height: geo.size.height)
                 
                 // MARK: Celebration
-                VStack {
-                    Spacer()
-                    
-                    VStack {
-                        if tappedCorrectAnswer {
-                            Text("\(game.questionScore)")
-                                .font(.largeTitle)
-                                .padding(.top, 50)
-                                .transition(.offset(y: -geo.size.height / 4))
-                                .offset(x: movePointsToScore ? geo.size.width / 2.3 : 0, y: movePointsToScore ? -geo.size.height / 13 : 0)
-                                .opacity(movePointsToScore ? 0 : 1)
-                                .onAppear {
-                                    withAnimation(.easeInOut(duration: 1.5).delay(3)) {
-                                        movePointsToScore = true
-                                    }
-                                }
-                        }
-                    }
-                    .animation(.easeInOut(duration: 1).delay(2), value: tappedCorrectAnswer)
-                    
-                    Spacer()
-                    
-                    VStack {
-                        if tappedCorrectAnswer {
-                            Text("Brilliant")
-                                .font(.custom("PartyLetPlain", size: 100))
-                                .transition(.scale.combined(with: .offset(y: -geo.size.height / 2)))
-                        }
-                    }
-                    .animation(.easeInOut(duration: tappedCorrectAnswer ? 1 : 0).delay(tappedCorrectAnswer ? 1 : 0), value: tappedCorrectAnswer)
-                    
-                    Spacer()
-                    
-                    if tappedCorrectAnswer {
-                        Text(game.currentQuestion.answer)
-                            .minimumScaleFactor(0.5)
-                            .multilineTextAlignment(.center)
-                            .padding(10)
-                            .frame(width: geo.size.width / 2.15, height: 80)
-                            .background(tappedCorrectAnswer ? .green.opacity(0.7) : .yellow.opacity(0.5))
-                            .clipShape(.rect(cornerRadius: 25))
-                            .scaleEffect(2)
-                            .matchedGeometryEffect(id: 1, in: namespace)
-                    }
-                    
-                    Spacer()
-                    Spacer()
-                    
-                    VStack {
-                        if tappedCorrectAnswer {
-                            let isLastQuestion = (game.answeredQuestions.count == game.activeQuestions.count)
-                            Button {
-                                animateViewsIn = false
-                                revealHint = false
-                                revealBook = false
-                                tappedCorrectAnswer = false
-                                wrongAnswersTapped = []
-                                movePointsToScore = false
-                                animatedScore = game.gameScore
-                                
-                                if isLastQuestion {
-                                    currentScreen = .finish
-                                } else {
-                                    game.newQuestion()
-                                }
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    animateViewsIn = true
-                                }
-                            } label: {
-                                Text(isLastQuestion ? "End Game" : "Next Level")
-                                    .minimumScaleFactor(0.5)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.horizontal, 10)
-                                    .frame(width: geo.size.width / 2.15, height: 80)
-                                    .background(.yellow.mix(with: .brown, by: 0.6))
-                                    .clipShape(.rect(cornerRadius: 25))
-                            }
-                            .font(.largeTitle)
-                            .transition(.offset(y: geo.size.height / 3))
-                            .phaseAnimator([false, true]) { content, phase in
-                                content
-                                    .scaleEffect(phase ? 1.2 : 1)
-                            } animation: { _ in
-                                    .easeInOut(duration: 1.3)
-                            }
-                        }
-                    }
-                    .animation(.easeInOut(duration: tappedCorrectAnswer ? 2.7 : 0).delay(tappedCorrectAnswer ? 2.7 : 0), value: tappedCorrectAnswer)
-                    
-                    Spacer()
-                    Spacer()
-                }
+                Celebration(
+                    animateViewsIn: $animateViewsIn,
+                    currentScreen: $currentScreen,
+                    revealHint: $revealHint,
+                    revealBook: $revealBook,
+                    tappedCorrectAnswer: $tappedCorrectAnswer,
+                    wrongAnswersTapped: $wrongAnswersTapped,
+                    movePointsToScore: $movePointsToScore,
+                    animatedScore: $animatedScore,
+                    geo: geo,
+                    namespace: namespace)
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .foregroundStyle(.white)
