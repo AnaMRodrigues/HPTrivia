@@ -50,7 +50,7 @@ struct Gameplay: View {
                         QuestionView(currentScreen: $currentScreen, animateViewsIn: $animateViewsIn)
                         
                         // MARK: Hints
-                        HintsView(animateViewsIn: $animateViewsIn, revealHint: $revealHint, revealBook: $revealBook, geo: geo)
+                        HintView(animateViewsIn: $animateViewsIn, revealHint: $revealHint, revealBook: $revealBook, geo: geo)
                         
                         // MARK: Answers
                         LazyVGrid (columns: [GridItem(), GridItem()]) {

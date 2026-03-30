@@ -48,7 +48,7 @@ struct HPTriviaApp: App {
  - 3. Make the recent scores section tappable and it goes to a full stats screen that shows all the games played
     - In this screen, do a sort filter for recent, highest score
  🟨 4. Refactor the gameplay screen
-    - Refactor the HintsView
+    ✅ Refactor the HintsView
  
  ✅ = Done
  🟨 = Started
